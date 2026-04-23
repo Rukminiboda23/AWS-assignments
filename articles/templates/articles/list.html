@@ -1,0 +1,49 @@
+{% extends 'articles/base.html' %}
+
+{% block content %}
+
+<h2 class="mb-4">Latest Articles</h2>
+
+<form method="GET" class="mb-5"> 
+    <input type="text" name="q" placeholder="🔍 Search..." 
+           class="form-control" value="{{ query }}">
+</form>
+
+<div class="row">
+    {% for article in articles %}
+    <div class="col-md-4 mb-4">
+        <div class="card p-3">
+
+            {% if article.image %}
+                <img src="{{ article.image.url }}" class="img-fluid rounded mb-2">
+            {% endif %}
+
+            <h4>{{ article.title }}</h4>
+            <p class="text-muted">
+                {{ article.content|truncatewords:20 }}
+            </p>
+
+            <a href="/article/{{ article.id }}/" class="btn btn-primary">
+                Read More →
+            </a>
+        </div>
+    </div>
+    {% empty %}
+    <p>No articles found</p>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+<div class="mt-5 text-center">
+    {% if articles.has_previous %}
+        <a href="?page={{ articles.previous_page_number }}" class="btn btn-outline-primary">Previous</a>
+    {% endif %}
+
+    <span class="mx-2">Page {{ articles.number }} of {{ articles.paginator.num_pages }}</span>
+
+    {% if articles.has_next %}
+        <a href="?page={{ articles.next_page_number }}" class="btn btn-outline-primary">Next</a>
+    {% endif %}
+</div>
+
+{% endblock %}
